@@ -2,44 +2,39 @@ package com.mm.bci.desafio.apiusuarios.controller;
 
 import com.mm.bci.desafio.apiusuarios.domain.User;
 import com.mm.bci.desafio.apiusuarios.dto.UserDTO;
+import com.mm.bci.desafio.apiusuarios.dto.UserResponseDTO;
 import com.mm.bci.desafio.apiusuarios.repository.UserRepository;
 import com.mm.bci.desafio.apiusuarios.security.service.UserDetailsServiceImpl;
 import com.mm.bci.desafio.apiusuarios.security.utils.JWTUtils;
+import com.mm.bci.desafio.apiusuarios.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/users")
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService service;
 
-    @Autowired
-    private UserDetailsServiceImpl service;
+    @PostMapping(value = "/sing-up")
+    public ResponseEntity<UserResponseDTO> userRegister(@RequestBody UserDTO userDTO) {
+        return new ResponseEntity<>(service.userRegister(userDTO), HttpStatus.CREATED);
+    }
 
-    @Autowired
-    private JWTUtils jwtUtils;
+    @GetMapping(value = "/message")
+    public ResponseEntity<String> message() {
 
-    @GetMapping(value = "/sing-up")
-    public ResponseEntity<String> userRegister() {
-        User user = new User();
-        user.setEmail("carlos@correo.com");
-        user.setPassword("1234");
-        user.setName("Carlos");
-        user.setRole("ADMIN");
-        userRepository.save(user);
-        UserDetails userDetails = service.loadUserByUsername(user.getEmail());
+        String message = "Mensaje privado";
 
-        String token = jwtUtils.generateToken(userDetails);
-
-        return new ResponseEntity<>(token, HttpStatus.CREATED);
+        return new ResponseEntity<>(message, HttpStatus.CREATED);
 
     }
+
+
 }

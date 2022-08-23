@@ -1,18 +1,12 @@
 package com.mm.bci.desafio.apiusuarios.domain;
 
-import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@Data
 @Entity
 @Table(name = "users")
 public class User {
@@ -39,6 +33,13 @@ public class User {
 
     @Column(name = "is_active")
     private boolean isActive;
+
+    @PrePersist
+    public void init() {
+        this.isActive = true;
+        this.lastLogin = LocalDateTime.now();
+        this.createAt = LocalDateTime.now();
+    }
 
 
     public UUID getId() {

@@ -1,5 +1,6 @@
 package com.mm.bci.desafio.apiusuarios.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -7,30 +8,26 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
-@Data
 @Entity
 @Table(name = "phones")
 public class Phone {
 
+    @JsonIgnore
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @NotNull
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
-    @NotNull
     private Long number;
 
-    @NotNull
     @Column(name = "city_code")
-    private Integer citycode;
+    private Integer cityCode;
 
-    @NotNull
     @Column(name = "country_code")
     private String countryCode;
 
@@ -60,11 +57,11 @@ public class Phone {
     }
 
     public Integer getCitycode() {
-        return citycode;
+        return cityCode;
     }
 
     public void setCitycode(Integer citycode) {
-        this.citycode = citycode;
+        this.cityCode = citycode;
     }
 
     public String getCountryCode() {
