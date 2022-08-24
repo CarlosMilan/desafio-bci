@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -100,24 +101,28 @@ public class UserService {
         return savedUser;
     }
 
+
     private User toUser(UserDTO userDTO) {
         User user = new User();
-        List<Phone> phones = new ArrayList<>();
-        for (PhoneDTO phoneDTO: userDTO.getPhones()) {
-            Phone phone = new Phone();
-            phone.setCitycode(phoneDTO.getCitycode());
-            phone.setCountryCode(phoneDTO.getCountryCode());
-            phone.setNumber(phoneDTO.getNumber());
-            phone.setUser(user);
-            phones.add(phone);
-        }
-        user.setPhones(phones);
         user.setRole(Role.ROLE_USER.getValue());
         user.setName(userDTO.getName());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         user.setEmail(userDTO.getEmail());
+        List<Phone> phones = userDTO.getPhones().stream()
+                .map(phoneDto -> toPhone(phoneDto, user))
+                .collect(Collectors.toList());
+        user.setPhones(phones);
 
         return user;
+    }
+
+    private Phone toPhone(PhoneDTO phoneDTO, User user) {
+        Phone phone = new Phone();
+        phone.setCitycode(phoneDTO.getCitycode());
+        phone.setCountryCode(phoneDTO.getCountryCode());
+        phone.setNumber(phoneDTO.getNumber());
+        phone.setUser(user);
+        return phone;
     }
 
     public LoginResponseDTO userLogged(HttpServletRequest request) {
