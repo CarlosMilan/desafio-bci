@@ -59,7 +59,7 @@ public class JWTUtils {
         return claimsResolver.apply(getAllClaims(token));
     }
     public Claims getAllClaims(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJwt(token).getBody();
+        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 
     public boolean validateToken(String token, UserDetails userDetails){

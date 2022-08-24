@@ -1,11 +1,10 @@
 package com.mm.bci.desafio.apiusuarios.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
+
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Entity
@@ -16,7 +15,7 @@ public class Phone {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id", updatable = false, nullable = false)
+    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid")
     private UUID id;
 
     @JsonIgnore

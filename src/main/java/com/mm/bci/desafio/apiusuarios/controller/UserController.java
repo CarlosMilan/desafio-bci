@@ -13,7 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -23,8 +25,13 @@ public class UserController {
     private UserService service;
 
     @PostMapping(value = "/sing-up")
-    public ResponseEntity<UserResponseDTO> userRegister(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserResponseDTO> userRegister(@Valid @RequestBody UserDTO userDTO) {
         return new ResponseEntity<>(service.userRegister(userDTO), HttpStatus.CREATED);
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<User> getUser(@PathVariable UUID id) {
+        return new ResponseEntity<>(service.getUser(id), HttpStatus.OK);
     }
 
     @GetMapping(value = "/message")

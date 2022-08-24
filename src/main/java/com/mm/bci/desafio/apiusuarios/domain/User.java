@@ -1,8 +1,10 @@
 package com.mm.bci.desafio.apiusuarios.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -14,15 +16,19 @@ public class User {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id", updatable = false, nullable = false)
+    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid")
     private UUID id;
 
     private String name;
+
+    @Column(name = "email", unique = true)
     private String email;
     private String password;
+
+    @JsonIgnore
     private String role;
 
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     private List<Phone> phones;
 
     @Column(name = "create_at")
