@@ -14,6 +14,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -28,6 +29,14 @@ public class JWTUtils {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
+        GrantedAuthority rol = userDetails.getAuthorities().stream().collect(Collectors.toList()).get(0);
+        claims.put("rol", rol);
+        String token = createToken(userDetails.getUsername(), claims);
+
+        return token;
+    }
+
+    public String generateToken(UserDetails userDetails, Map<String, Object> claims) {
         GrantedAuthority rol = userDetails.getAuthorities().stream().collect(Collectors.toList()).get(0);
         claims.put("rol", rol);
         String token = createToken(userDetails.getUsername(), claims);

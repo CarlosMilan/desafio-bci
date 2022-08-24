@@ -3,10 +3,8 @@ package com.mm.bci.desafio.apiusuarios.service;
 import com.mm.bci.desafio.apiusuarios.domain.Phone;
 import com.mm.bci.desafio.apiusuarios.domain.Role;
 import com.mm.bci.desafio.apiusuarios.domain.User;
+import com.mm.bci.desafio.apiusuarios.dto.*;
 import com.mm.bci.desafio.apiusuarios.dto.Error;
-import com.mm.bci.desafio.apiusuarios.dto.PhoneDTO;
-import com.mm.bci.desafio.apiusuarios.dto.UserDTO;
-import com.mm.bci.desafio.apiusuarios.dto.UserResponseDTO;
 import com.mm.bci.desafio.apiusuarios.exceptions.ConstraintsException;
 import com.mm.bci.desafio.apiusuarios.exceptions.UserAlreadyExistException;
 import com.mm.bci.desafio.apiusuarios.repository.UserRepository;
@@ -18,7 +16,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -118,5 +118,29 @@ public class UserService {
         user.setEmail(userDTO.getEmail());
 
         return user;
+    }
+
+    public LoginResponseDTO userLogged(HttpServletRequest request) {
+        String token = request.getHeader("Authorization").substring(7);
+        String username = jwtUtils.getUsername(token);
+        User user = userRepository.findByEmail(username);
+        String newToken = createToken(user);
+        user.setLastLogin(LocalDateTime.now());
+        return createLoginResponse(userRepository.save(user), newToken);
+    }
+
+    private LoginResponseDTO createLoginResponse(User user, String token) {
+
+        LoginResponseDTO response = new LoginResponseDTO();
+        response.setId(user.getId());
+        response.setCreated(user.getCreateAt());
+        response.setLastLogin(user.getLastLogin());
+        response.setToken(token);
+        response.setActive(user.isActive());
+        response.setName(user.getName());
+        response.setEmail(user.getEmail());
+        response.setPhones(user.getPhones());
+        response.setPassword(user.getPassword());
+        return response;
     }
 }
