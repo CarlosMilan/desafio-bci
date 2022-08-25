@@ -5,10 +5,10 @@ import com.mm.bci.desafio.apiusuarios.exceptions.ConstraintsException;
 import com.mm.bci.desafio.apiusuarios.exceptions.UserAlreadyExistException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import javax.validation.ConstraintViolationException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,7 +20,7 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Error> handleException(Exception ex) {
-        Error error = new Error(new Timestamp(new Date().getTime()),HttpStatus.INTERNAL_SERVER_ERROR.value() , ex.getMessage());
+        Error error = new Error(new Timestamp(new Date().getTime()),HttpStatus.INTERNAL_SERVER_ERROR.value() , ex.toString());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 
@@ -33,13 +33,13 @@ public class ExceptionHandlerController {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<List<Error>> handleConstraintViolationException(ConstraintViolationException ex) {
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<List<Error>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         List<Error> errors = new ArrayList<>();
-        ex.getConstraintViolations().forEach(e -> {
+        ex.getBindingResult().getFieldErrors().forEach(e -> {
             Error error = new Error();
             error.setTimestamp(new Timestamp(new Date().getTime()));
-            error.setDetail(e.getMessage());
+            error.setDetail(e.getField() + " : " + e.getDefaultMessage());
             error.setCode(HttpStatus.BAD_REQUEST.value());
             errors.add(error);
         });
@@ -52,9 +52,9 @@ public class ExceptionHandlerController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
-    @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<Error> handleNoSuchElementException(NoSuchElementException ex) {
-        Error error = new Error(new Timestamp(new Date().getTime()),HttpStatus.BAD_REQUEST.value() , ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-    }
+//    @ExceptionHandler(NoSuchElementException.class)
+//    public ResponseEntity<Error> handleNoSuchElementException(NoSuchElementException ex) {
+//        Error error = new Error(new Timestamp(new Date().getTime()),HttpStatus.BAD_REQUEST.value() , ex.getMessage());
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+//    }
 }

@@ -1,6 +1,7 @@
 package com.mm.bci.desafio.apiusuarios.dto;
 import lombok.Data;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -17,7 +18,7 @@ public class UserDTO {
     @NotNull(message = "The password cannot be empty")
     @Size(min = 8, max = 12, message = "The password must be between 8 and 12 characters")
     private String password;
-    private List<PhoneDTO> phones;
+    private List<@Valid PhoneDTO> phones;
 
     public String getName() {
         return name;

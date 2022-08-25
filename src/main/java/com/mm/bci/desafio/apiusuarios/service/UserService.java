@@ -4,7 +4,6 @@ import com.mm.bci.desafio.apiusuarios.domain.Phone;
 import com.mm.bci.desafio.apiusuarios.domain.Role;
 import com.mm.bci.desafio.apiusuarios.domain.User;
 import com.mm.bci.desafio.apiusuarios.dto.*;
-import com.mm.bci.desafio.apiusuarios.dto.Error;
 import com.mm.bci.desafio.apiusuarios.exceptions.ConstraintsException;
 import com.mm.bci.desafio.apiusuarios.exceptions.UserAlreadyExistException;
 import com.mm.bci.desafio.apiusuarios.repository.UserRepository;
@@ -17,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -51,6 +49,16 @@ public class UserService {
         response.setUser(user);
         response.setToken(createToken(user));
         return response;
+    }
+
+    private User saveUser(UserDTO userDTO) {
+        User user = toUser(userDTO);
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new UserAlreadyExistException("There is already a user with the email " + user.getEmail());
+        }
+        User savedUser = userRepository.saveAndFlush(user);
+
+        return savedUser;
     }
 
     private void checkPassword(String password) {
@@ -91,17 +99,6 @@ public class UserService {
         return matcher;
     }
 
-    public User saveUser(UserDTO userDTO) {
-        User user = toUser(userDTO);
-        if (userRepository.existsByEmail(user.getEmail())) {
-            throw new UserAlreadyExistException("There is already a user with the email " + user.getEmail());
-        }
-        User savedUser = userRepository.saveAndFlush(user);
-
-        return savedUser;
-    }
-
-
     private User toUser(UserDTO userDTO) {
         User user = new User();
         user.setRole(Role.ROLE_USER.getValue());
@@ -125,13 +122,13 @@ public class UserService {
         return phone;
     }
 
-    public LoginResponseDTO userLogged(HttpServletRequest request) {
-        String token = request.getHeader("Authorization").substring(7);
+    public LoginResponseDTO login(String token) {
+
         String username = jwtUtils.getUsername(token);
         User user = userRepository.findByEmail(username);
         String newToken = createToken(user);
         user.setLastLogin(LocalDateTime.now());
-        return createLoginResponse(userRepository.save(user), newToken);
+        return createLoginResponse(userRepository.saveAndFlush(user), newToken);
     }
 
     private LoginResponseDTO createLoginResponse(User user, String token) {
