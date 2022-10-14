@@ -13,16 +13,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @ControllerAdvice
 public class ExceptionHandlerController {
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Error> handleException(Exception ex) {
-        Error error = new Error(new Timestamp(new Date().getTime()),HttpStatus.INTERNAL_SERVER_ERROR.value() , ex.toString());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
-    }
 
     @ExceptionHandler(ConstraintsException.class)
     public ResponseEntity<Error> handleConstraintsException(ConstraintsException ex) {
@@ -52,9 +45,4 @@ public class ExceptionHandlerController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
-//    @ExceptionHandler(NoSuchElementException.class)
-//    public ResponseEntity<Error> handleNoSuchElementException(NoSuchElementException ex) {
-//        Error error = new Error(new Timestamp(new Date().getTime()),HttpStatus.BAD_REQUEST.value() , ex.getMessage());
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-//    }
 }

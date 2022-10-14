@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ComponentScan(basePackages = {"com.mm.bci.desafio.apiusuarios"})
 @SpringBootTest
 @AutoConfigureMockMvc
-public class UserControllerTest {
+class UserControllerTest {
 
     @Autowired
     private MockMvc mvc;
@@ -76,9 +76,9 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.user.id").value(id.toString()))
                 .andExpect(jsonPath("$.user.email").value("charlie_01@correo.com"))
                 .andExpect(jsonPath("$.user.phones[0].number").value(345790145))
-                .andExpect(jsonPath("$.user.phones[0].citycode").value(261))
+                .andExpect(jsonPath("$.user.phones[0].cityCode").value(261))
                 .andExpect(jsonPath("$.user.phones[1].number").value(155789456))
-                .andExpect(jsonPath("$.user.phones[1].citycode").value(262));
+                .andExpect(jsonPath("$.user.phones[1].cityCode").value(262));
 
     }
 

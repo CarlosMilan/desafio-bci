@@ -24,13 +24,13 @@ public class Data {
         Phone phone1 = new Phone();
         phone1.setUser(user);
         phone1.setNumber(345790145L);
-        phone1.setCitycode(261);
+        phone1.setCityCode(261);
         phone1.setCountryCode("+54");
 
         Phone phone2 = new Phone();
         phone2.setUser(user);
         phone2.setNumber(155789456L);
-        phone2.setCitycode(262);
+        phone2.setCityCode(262);
         phone2.setCountryCode("+54");
 
         user.setPhones(Arrays.asList(phone1, phone2));

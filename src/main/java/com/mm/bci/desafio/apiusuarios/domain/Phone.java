@@ -2,11 +2,15 @@ package com.mm.bci.desafio.apiusuarios.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.UUID;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "phones")
 public class Phone {
@@ -29,45 +33,4 @@ public class Phone {
 
     @Column(name = "country_code")
     private String countryCode;
-
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Long getNumber() {
-        return number;
-    }
-
-    public void setNumber(Long number) {
-        this.number = number;
-    }
-
-    public Integer getCitycode() {
-        return cityCode;
-    }
-
-    public void setCitycode(Integer citycode) {
-        this.cityCode = citycode;
-    }
-
-    public String getCountryCode() {
-        return countryCode;
-    }
-
-    public void setCountryCode(String countryCode) {
-        this.countryCode = countryCode;
-    }
 }

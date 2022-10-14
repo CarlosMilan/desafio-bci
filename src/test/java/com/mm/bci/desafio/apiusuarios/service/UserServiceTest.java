@@ -9,7 +9,6 @@ import com.mm.bci.desafio.apiusuarios.exceptions.UserAlreadyExistException;
 import com.mm.bci.desafio.apiusuarios.repository.UserRepository;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-public class UserServiceTest {
+class UserServiceTest {
 
     @MockBean
     UserRepository userRepository;
