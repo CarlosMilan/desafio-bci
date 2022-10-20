@@ -15,6 +15,12 @@ Este proyecto fue desarrollado usando
 
 ### Diagramas de secuencia 
 
+
+
 #### Sing-up
 
-![Diagrama de secuencua]()
+![Diagrama de secuencua sing-up](https://github.com/CarlosMilan/desafio-bci/blob/develop/Diagramas/Sing-up.jpg?raw=true)
+
+#### Login
+
+![Diagrama de secuencua login](https://github.com/CarlosMilan/desafio-bci/blob/develop/Diagramas/Sing-up.jpg?raw=true)
